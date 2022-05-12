@@ -6,37 +6,32 @@
 #ifndef RTSP_CAMERA
 #define RTSP_CAMERA
 
-#include<ros/ros.h>
-#include<opencv2/opencv.hpp>
-#include<cv_bridge/cv_bridge.h>
+#include <string>
 
-#include<std_msgs/String.h>
-#include<image_transport/image_transport.h>
-#include<sensor_msgs/image_encodings.h>
-#include<sensor_msgs/Image.h>
-#include<sensor_msgs/CameraInfo.h>
+#include <ros/ros.h>
+#include <opencv2/opencv.hpp>
+#include <cv_bridge/cv_bridge.h>
+
+#include <image_transport/image_transport.h>
+
 
 class RtspCamera {
   public:
-    RtspCamera(ros::NodeHandle& n);
+    RtspCamera(ros::NodeHandle& n, const std::string& video_stream_url);
     ~RtspCamera();
-
-    bool init(const std::string video_stream_url);
-    bool reset(const std::string video_stream_url);
 
     void spin();
   
   protected:
+    bool hasSubscribers();
     void convertCvToRosImg(const cv::Mat& mat, sensor_msgs::Image& ros_img, sensor_msgs::CameraInfo& ci);
 
   private:
     cv::VideoCapture                vcap_;
     std::string                     video_stream_address_;
-    std::string                     status_;
 
     image_transport::Publisher pub_video_;
     ros::Publisher pub_camera_info_;
-    ros::Publisher pub_status_;
     ros::NodeHandle nh_;
 };
 
