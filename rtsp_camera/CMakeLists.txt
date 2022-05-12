@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(rocon_rtsp_camera_relay)
+project(rtsp_camera)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -13,12 +13,12 @@ find_package(OpenCV)
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES rocon_rtsp_camera_relay
+  LIBRARIES rtsp_camera_lib
   CATKIN_DEPENDS roscpp cv_bridge image_transport sensor_msgs std_msgs
   DEPENDS OpenCV
 )
 
-catkin_add_env_hooks(25.rocon-rtsp-camera-relay SHELLS sh DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/env-hooks)
+catkin_add_env_hooks(25.rtsp-camera SHELLS sh DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/env-hooks)
 
 
 include_directories(
@@ -27,25 +27,25 @@ include_directories(
   ${OpenCV_INCLUDE_DIRS}
 )
 
-add_library(rocon_rtsp_camera_relay
-  src/rocon_rtsp_camera_relay.cpp
+add_library(rtsp_camera_lib
+  src/rtsp_camera.cpp
 )
 
-target_link_libraries(rocon_rtsp_camera_relay
+target_link_libraries(rtsp_camera_lib
   ${catkin_LIBRARIES}
   ${OpenCV_LIBRARIES}
 )
-add_dependencies(rocon_rtsp_camera_relay rocon_rtsp_camera_relay_generate_messages ${catkin_EXPORTED_TARGETS})
+add_dependencies(rtsp_camera_lib ${catkin_EXPORTED_TARGETS})
 
-add_executable(rocon_rtsp_camera_relay_node src/main.cpp)
-target_link_libraries(rocon_rtsp_camera_relay_node rocon_rtsp_camera_relay)
-add_dependencies(rocon_rtsp_camera_relay_node rocon_rtsp_camera_relay)
+add_executable(rtsp_camera_node src/main.cpp)
+target_link_libraries(rtsp_camera_node rtsp_camera_lib)
+add_dependencies(rtsp_camera_node rtsp_camera_lib)
 
 #############
 ## Install ##
 #############
 
-install(TARGETS rocon_rtsp_camera_relay rocon_rtsp_camera_relay_node
+install(TARGETS rtsp_camera_lib rtsp_camera_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -53,10 +53,6 @@ install(TARGETS rocon_rtsp_camera_relay rocon_rtsp_camera_relay_node
 
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-)
-
-install(DIRECTORY rapps
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
 install(DIRECTORY launch

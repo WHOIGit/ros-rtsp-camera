@@ -3,8 +3,8 @@
    https://raw.github.com/robotics-in-concert/rocon_devices/license/LICENSE
 */
 
-#ifndef ROCON_RTSP_CAMERA_RELAY
-#define ROCON_RTSP_CAMERA_RELAY
+#ifndef RTSP_CAMERA
+#define RTSP_CAMERA
 
 #include<ros/ros.h>
 #include<opencv2/opencv.hpp>
@@ -16,12 +16,10 @@
 #include<sensor_msgs/Image.h>
 #include<sensor_msgs/CameraInfo.h>
 
-namespace rocon {
-
-class RoconRtspCameraRelay {
+class RtspCamera {
   public:
-    RoconRtspCameraRelay(ros::NodeHandle& n);
-    ~RoconRtspCameraRelay();
+    RtspCamera(ros::NodeHandle& n);
+    ~RtspCamera();
 
     bool init(const std::string video_stream_url);
     bool reset(const std::string video_stream_url);
@@ -41,6 +39,5 @@ class RoconRtspCameraRelay {
     ros::Publisher pub_status_;
     ros::NodeHandle nh_;
 };
-}
 
 #endif

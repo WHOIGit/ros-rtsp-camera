@@ -3,11 +3,9 @@
    https://raw.github.com/robotics-in-concert/rocon_devices/license/LICENSE
 */
 
-#include <rocon_rtsp_camera_relay/rocon_rtsp_camera_relay.hpp>
+#include <rtsp_camera/rtsp_camera.hpp>
 
-namespace rocon {
-
-RoconRtspCameraRelay::RoconRtspCameraRelay(ros::NodeHandle& n) : nh_(n)
+RtspCamera::RtspCamera(ros::NodeHandle& n) : nh_(n)
 {
   image_transport::ImageTransport it(nh_);    
   pub_video_ = it.advertise("image", 1);
@@ -15,12 +13,12 @@ RoconRtspCameraRelay::RoconRtspCameraRelay(ros::NodeHandle& n) : nh_(n)
   pub_status_ = nh_.advertise<std_msgs::String>("status", 1);
 }
 
-RoconRtspCameraRelay::~RoconRtspCameraRelay()
+RtspCamera::~RtspCamera()
 {
   vcap_.release();
 }
 
-bool RoconRtspCameraRelay::init(const std::string video_stream_url) {
+bool RtspCamera::init(const std::string video_stream_url) {
   video_stream_address_ = video_stream_url;
 
   if (!vcap_.open(video_stream_address_)) 
@@ -29,7 +27,7 @@ bool RoconRtspCameraRelay::init(const std::string video_stream_url) {
     return true;
 }
 
-bool RoconRtspCameraRelay::reset(const std::string video_stream_url)
+bool RtspCamera::reset(const std::string video_stream_url)
 {
   vcap_.release();
   return init(video_stream_url);
@@ -38,7 +36,7 @@ bool RoconRtspCameraRelay::reset(const std::string video_stream_url)
 /*
   Convert cv::Mat to sensor_msgs:Image and CameraInfo
  */
-void RoconRtspCameraRelay::convertCvToRosImg(const cv::Mat& mat, sensor_msgs::Image& ros_img, sensor_msgs::CameraInfo& ci)
+void RtspCamera::convertCvToRosImg(const cv::Mat& mat, sensor_msgs::Image& ros_img, sensor_msgs::CameraInfo& ci)
 {
   cv_bridge::CvImage cv_img;
 
@@ -54,7 +52,7 @@ void RoconRtspCameraRelay::convertCvToRosImg(const cv::Mat& mat, sensor_msgs::Im
 }
 
 
-void RoconRtspCameraRelay::spin()
+void RtspCamera::spin()
 {
   cv::Mat mat;
   sensor_msgs::CameraInfo ci;
@@ -79,5 +77,4 @@ void RoconRtspCameraRelay::spin()
     pub_status_.publish(ros_str);
     cv::waitKey(1);
   }
-}
 }

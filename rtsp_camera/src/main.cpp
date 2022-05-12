@@ -4,17 +4,17 @@
 */
 
 #include <ros/ros.h>
-#include <rocon_rtsp_camera_relay/rocon_rtsp_camera_relay.hpp>
+#include <rtsp_camera/rtsp_camera.hpp>
 
 int main (int argc, char** argv) 
 {
-  ros::init(argc, argv, "rtsp_camera_relay");
+  ros::init(argc, argv, "rtsp_camera");
   ros::NodeHandle pnh("~");
   std::string video_stream_url, user, password;
 
   pnh.getParam("video_stream_url", video_stream_url);
 
-  rocon::RoconRtspCameraRelay rtsp(pnh);
+  RtspCamera rtsp(pnh);
   ROS_INFO("Rtsp Camera : Initialising..");
   if(!rtsp.init(video_stream_url))
   {

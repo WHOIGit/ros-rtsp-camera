@@ -1,0 +1,6 @@
+<launch>
+  <arg name="video_stream_url" default="$(env RTSP_CAMERA_URL)" />
+  <node pkg="rtsp_camera" name="rtsp_camera" type="rtsp_camera_node">
+    <param name="video_stream_url" value="$(arg video_stream_url)" />
+  </node>
+</launch>
