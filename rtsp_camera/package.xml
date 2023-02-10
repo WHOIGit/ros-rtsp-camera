@@ -22,4 +22,6 @@
   <run_depend>image_transport</run_depend>
   <run_depend>sensor_msgs</run_depend>
   <run_depend>std_msgs</run_depend>
+  <run_depend>gstreamer1.0-libav</run_depend>
+  <run_depend>gstreamer1.0-rtsp</run_depend>
 </package>
